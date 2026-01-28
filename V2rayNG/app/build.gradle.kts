@@ -165,7 +165,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    testImplementation(libs.org.mockito.mockito.inline)
-    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.org_mockito_mockito_inline)
+    testImplementation(libs.mockito_kotlin)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
