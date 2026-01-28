@@ -88,13 +88,24 @@ jobs:
         rm -rf ${{ github.workspace }}/V2rayNG/.gradle
         rm -rf ${{ github.workspace }}/V2rayNG/app/.gradle
         rm -rf ~/.gradle/caches
+        rm -rf ~/.gradle/wrapper
+
+    - name: Verify Gradle version
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        echo "=== Gradle Wrapper Properties ==="
+        cat gradle/wrapper/gradle-wrapper.properties
+        echo ""
+        echo "=== Gradle Wrapper JAR ==="
+        ls -lh gradle/wrapper/
 
     - name: Build APK (Unsigned)
       run: |
         cd ${{ github.workspace }}/V2rayNG
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
         chmod 755 gradlew
-        ./gradlew assembleRelease
+        ./gradlew --version
+        ./gradlew assembleRelease --no-daemon --refresh-dependencies
     
     - name: Upload arm64-v8a APK
       uses: actions/upload-artifact@v6
