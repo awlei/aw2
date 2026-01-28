@@ -1,118 +1,110 @@
-# 构建状态 - 需要检查 ❌
+# 构建状态 - 修复中 🔄
+
+## ✅ 问题已修复
+
+### 错误原因
+
+AGP 9.0 内置了 Kotlin 支持，不再需要显式声明 `org.jetbrains.kotlin.android` 插件。
+
+### 修复方案
+
+移除了以下文件中的 Kotlin 插件声明：
+1. `V2rayNG/app/build.gradle.kts` - 移除 `alias(libs.plugins.kotlin.android)`
+2. `V2rayNG/build.gradle.kts` - 移除 `alias(libs.plugins.kotlin.android) apply false`
+
+### 提交记录
+
+```
+commit 2c5f6f22
+fix: 移除Kotlin插件声明（AGP 9.0内置Kotlin支持）
+```
+
+---
 
 ## 📊 当前构建状态
 
-- **构建ID**: 21432474952
-- **状态**: 已完成 (completed)
-- **结论**: 失败 (failure)
-- **查看详情**: https://github.com/awlei/aw2/actions/runs/21432474952
+- **新构建ID**: 21432673127
+- **状态**: 正在进行 (in_progress)
+- **提交**: 2c5f6f22 - fix: 移除Kotlin插件声明
+- **查看详情**: https://github.com/awlei/aw2/actions/runs/21432673127
 
 ---
 
-## ❌ 构建失败
+## ⏱️ 预计构建时间
 
-构建在 "Build APK (Release - Unsigned)" 步骤失败。
-
-### 可能的原因
-
-1. **编译错误** - Kotlin代码可能有语法错误
-2. **依赖问题** - 缺少依赖或版本冲突
-3. **资源错误** - 布局文件或资源文件有错误
-4. **配置错误** - Gradle配置有问题
+| 步骤 | 预计时间 |
+|------|---------|
+| Checkout代码 | 30秒 |
+| 设置Android SDK | 1-2分钟 |
+| 安装NDK | 1-2分钟 |
+| 构建libhevtun | 1-2分钟 |
+| 下载libv2ray | 30秒 |
+| 编译APK | 5-7分钟 |
+| 上传Artifacts | 30秒 |
+| **总计** | **10-15分钟** |
 
 ---
 
-## 🔍 如何查看错误日志
+## 🔍 监控构建进度
 
 ### 方法1: GitHub Actions页面
 
-1. 访问: https://github.com/awlei/aw2/actions/runs/21432474952
-2. 点击 "Build APK (Release - Unsigned)" 步骤
-3. 查看详细错误日志
+访问: https://github.com/awlei/aw2/actions/runs/21432673127
 
-### 方法2: 使用curl查看
+### 方法2: 使用监控脚本
+
+```bash
+cd /workspace/projects/aw2-vpn
+GITHUB_TOKEN=your_token bash check_build_status.sh
+```
+
+### 方法3: 使用curl命令
 
 ```bash
 curl -H "Authorization: token YOUR_TOKEN" \
-  https://api.github.com/repos/awlei/aw2/actions/runs/21432474952/jobs
+  https://api.github.com/repos/awlei/aw2/actions/runs/21432673127
 ```
 
 ---
 
-## 🔧 修复建议
+## 📱 构建成功后下载APK
 
-### 1. 检查MainActivitySimple.kt
-
-确保导入所有必要的类：
-
-```kotlin
-import com.v2ray.ang.R
-import com.v2ray.ang.databinding.ActivityMainSimpleBinding
-import com.v2ray.ang.extension.toast
-import com.v2ray.ang.handler.MmkvManager
-import com.v2ray.ang.handler.V2RayServiceManager
-import com.v2ray.ang.dto.PermissionType
-import com.v2ray.ang.viewmodel.MainViewModel
-import com.v2ray.ang.handler.AngConfigManager
-```
-
-### 2. 检查布局文件
-
-确保所有布局文件语法正确：
-
-- `activity_main_simple.xml`
-- `item_server_simple.xml`
-- `dialog_add_server.xml`
-
-### 3. 检查资源文件
-
-确保所有drawable文件有效：
-
-- `bg_tag.xml`
-- `bg_subscription_tag.xml`
-- `ic_*.xml` 系列图标
-
-### 4. 本地构建测试
-
-在推送前先在本地构建测试：
-
-```bash
-cd V2rayNG
-./gradlew assembleRelease
-```
+1. **等待10-15分钟**让构建完成
+2. **访问Actions页面**:
+   - https://github.com/awlei/aw2/actions/runs/21432673127
+3. **等待状态变为 ✅ 成功**
+4. **向下滚动到 Artifacts 部分**
+5. **点击 `aw-apk-release` 下载**
+6. **解压ZIP文件**
+7. **得到4个APK文件**:
+   - `aw_release_arm64-v8a.apk` - 64位ARM设备（推荐）
+   - `aw_release_armeabi-v7a.apk` - 32位ARM设备
+   - `aw_release_x86.apk` - x86模拟器
+   - `aw_release_x86_64.apk` - x86_64模拟器
 
 ---
 
-## 📝 下一步操作
+## 📝 构建历史
 
-1. **查看错误日志** - 了解具体错误信息
-2. **修复错误** - 根据错误日志修复代码
-3. **本地测试** - 在本地构建验证
-4. **推送修复** - 提交修复并推送
-5. **重新构建** - GitHub Actions自动重新构建
+### 构建ID: 21432474952 (失败) ❌
+- **状态**: 失败 (failure)
+- **错误**: Kotlin插件冲突
+- **详情**: https://github.com/awlei/aw2/actions/runs/21432474952
 
----
-
-## 💡 快速修复检查清单
-
-- [ ] 检查MainActivitySimple.kt的import语句
-- [ ] 检查所有布局文件的语法
-- [ ] 检查drawable资源文件
-- [ ] 检查strings.xml中的新字符串
-- [ ] 检查AndroidManifest.xml配置
-- [ ] 本地运行 `./gradlew assembleRelease` 测试
+### 构建ID: 21432673127 (进行中) 🔄
+- **状态**: 正在进行 (in_progress)
+- **修复**: 移除Kotlin插件声明
+- **详情**: https://github.com/awlei/aw2/actions/runs/21432673127
 
 ---
 
-## 🆘 需要帮助？
+## 💡 参考文档
 
-如果无法确定错误原因，请：
-
-1. 复制完整的错误日志
-2. 提交Issue到GitHub
-3. 或者联系开发者
+- [AGP Built-in Kotlin Support](https://kotl.in/gradle/agp-built-in-kotlin)
+- [Gradle Build Scans](https://help.gradle.org)
 
 ---
 
-**更新时间**: 2026-01-28 17:30
-**构建ID**: 21432474952
+**更新时间**: 2026-01-28 17:35
+**构建ID**: 21432673127
+**状态**: 🔄 进行中
