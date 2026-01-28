@@ -37,24 +37,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        debug {
-            isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
-        }
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            // 确保Release版本的签名配置正确
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-
     flavorDimensions.add("distribution")
     productFlavors {
         create("fdroid") {
@@ -68,9 +50,84 @@ android {
         }
     }
 
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+
+    androidComponents {
+        beforeVariants { variantBuilder ->
+            val variantName = variantBuilder.name
+            if (variantName.contains("fdroid")) {
+                variantBuilder.enable = true
+            }
+        }
+
+        onVariants { variant ->
+            val variantName = variant.name
+            val versionCode = defaultConfig.versionCode
+            val versionName = defaultConfig.versionName
+
+            val versionCodes = mapOf(
+                "armeabi-v7a" to 2,
+                "arm64-v8a" to 1,
+                "x86" to 4,
+                "x86_64" to 3,
+                "universal" to 0
+            )
+
+            val fdroidVersionCodes = mapOf(
+                "armeabi-v7a" to 4,
+                "arm64-v8a" to 4,
+                "x86" to 4,
+                "x86_64" to 4,
+                "universal" to 4
+            )
+
+            val isFdroid = variantName.contains("fdroid", ignoreCase = true)
+
+            variant.outputs.forEach { output ->
+                val abi = output.filters.find { it.filterType.name == "ABI" }?.identifier ?: "universal"
+
+                val codes = if (isFdroid) versionCodes else fdroidVersionCodes
+                val newVersionCode = if (codes.containsKey(abi)) {
+                    if (isFdroid) {
+                        (100 * versionCode + codes[abi]!!) + 5000000
+                    } else {
+                        (1000000 * codes[abi]!!) + versionCode
+                    }
+                } else {
+                    versionCode
+                }
+
+                output.versionCode.set(newVersionCode)
+
+                val newOutputFileName = if (isFdroid) {
+                    "aw_${versionName}-fdroid_${abi}.apk"
+                } else {
+                    "aw_${versionName}_${abi}.apk"
+                }
+
+                output.outputFileName.set(newOutputFileName)
+            }
+        }
+    }
+
     sourceSets {
         getByName("main") {
-            jniLibs.srcDirs("libs")
+            jniLibs.setSrcDirs(listOf("libs"))
         }
     }
 
@@ -90,50 +147,6 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-        }
-    }
-
-    applicationVariants.all {
-        val variant = this
-        val isFdroid = variant.productFlavors.any { it.name == "fdroid" }
-        if (isFdroid) {
-            val versionCodes =
-                mapOf(
-                    "armeabi-v7a" to 2, "arm64-v8a" to 1, "x86" to 4, "x86_64" to 3, "universal" to 0
-                )
-
-            variant.outputs
-                .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
-                .forEach { output ->
-                    val abi = output.getFilter("ABI") ?: "universal"
-                    output.outputFileName = "aw_${variant.versionName}-fdroid_${abi}.apk"
-                    if (versionCodes.containsKey(abi)) {
-                        output.versionCodeOverride =
-                            (100 * variant.versionCode + versionCodes[abi]!!).plus(5000000)
-                    } else {
-                        return@forEach
-                    }
-                }
-        } else {
-            val versionCodes =
-                mapOf("armeabi-v7a" to 4, "arm64-v8a" to 4, "x86" to 4, "x86_64" to 4, "universal" to 4)
-
-            variant.outputs
-                .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
-                .forEach { output ->
-                    val abi = if (output.getFilter("ABI") != null)
-                        output.getFilter("ABI")
-                    else
-                        "universal"
-
-                    output.outputFileName = "aw_${variant.versionName}_${abi}.apk"
-                    if (versionCodes.containsKey(abi)) {
-                        output.versionCodeOverride =
-                            (1000000 * versionCodes[abi]!!).plus(variant.versionCode)
-                    } else {
-                        return@forEach
-                    }
-                }
         }
     }
 
