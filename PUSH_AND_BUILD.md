@@ -1,308 +1,340 @@
-# 推送代码到GitHub并构建APK
+# 推送成功并触发自动构建 🎉
 
-**当前状态**: ✅ 代码已提交到本地Git仓库
-**下一步**: 推送到GitHub并触发构建
+## ✅ 推送结果
+
+```
+To https://github.com/awlei/aw2.git
+   1b0af176..69629be6  master -> master
+```
+
+**状态**: ✅ 推送成功
+**分支**: master
+**Commit**: `69629be6` - feat: 重新设计简化的操作界面
 
 ---
 
-## 📝 当前Git状态
+## 🔄 GitHub Actions 自动构建已触发
 
-```bash
-Branch: master
-Latest commit: 3fe35016
-Message: feat: 重命名项目为aw并配置GitHub Actions自动化构建
-Files changed: 31 files (+3609, -68)
+### 构建信息
+
+- **构建ID**: 21432442372
+- **状态**: 🔄 正在进行中 (in_progress)
+- **提交信息**: feat: 重新设计简化的操作界面
+
+### 查看构建进度
+
+**Actions页面**:
+```
+https://github.com/awlei/aw2/actions
 ```
 
----
-
-## 🚀 推送代码到GitHub
-
-### 方法1: 使用HTTPS推送（推荐）
-
-```bash
-cd /workspace/projects/aw2-vpn
-git push origin master
+**最新构建**:
 ```
-
-**如果需要认证**:
-```bash
-# GitHub会提示输入用户名和密码
-# 用户名: 你的GitHub用户名
-# 密码: 使用Personal Access Token (不是GitHub密码)
-```
-
-### 方法2: 使用SSH推送
-
-如果你已经配置了SSH密钥：
-
-```bash
-cd /workspace/projects/aw2-vpn
-git remote set-url origin git@github.com:awlei/aw2.git
-git push origin master
+https://github.com/awlei/aw2/actions/runs/21432442372
 ```
 
 ---
 
-## 🔐 获取GitHub Personal Access Token
+## 📦 本次更新内容
 
-### 1. 生成Token
+### 新增文件 (17个)
 
-1. 访问 https://github.com/settings/tokens
-2. 点击 "Generate new token" → "Generate new token (classic)"
-3. 设置权限：
-   - `repo` (完整仓库访问权限)
-   - `workflow` (允许GitHub Actions)
-4. 点击 "Generate token"
-5. **重要**: 复制token（只显示一次！）
+**Kotlin代码 (2个)**:
+- `MainActivitySimple.kt` - 简化版主Activity
+- `ServerSimpleAdapter.kt` - 简化版RecyclerView适配器
 
-### 2. 使用Token推送
+**布局文件 (3个)**:
+- `activity_main_simple.xml` - 简化版主界面布局
+- `item_server_simple.xml` - 简化版列表项布局
+- `dialog_add_server.xml` - 添加服务器对话框
 
-```bash
-# 当Git提示输入密码时，粘贴Token
-Password: <你的Personal Access Token>
-```
+**资源文件 (6个)**:
+- `bg_tag.xml` - 标签背景
+- `bg_subscription_tag.xml` - 订阅标签背景
+- `ic_qrcode_scan.xml` - 扫码图标
+- `ic_content_paste_24dp.xml` - 剪贴板图标
+- `ic_chevron_right_24dp.xml` - 箭头图标
+- `ic_play_arrow_24dp.xml` - 播放图标
+- `ic_speed_24dp.xml` - 速度图标
 
-### 3. 保存Token（可选）
+**文档 (3个)**:
+- `PUSH_GUIDE.md` - GitHub推送指南
+- `PUSH_AND_BUILD.md` - 推送和构建指南
+- `SIMPLE_UI_DESIGN.md` - 简化版界面设计文档
 
-```bash
-# 使用Git Credential Helper
-git config --global credential.helper store
-git push origin master
-# 输入一次后，Token会被保存
-```
+**修改文件 (2个)**:
+- `AndroidManifest.xml` - 添加MainActivitySimple
+- `strings.xml` - 新增20+个字符串资源
 
----
-
-## ⚙️ 推送后自动构建
-
-推送代码后，GitHub Actions会**自动触发**构建：
-
-### 自动构建触发条件
-
-```yaml
-# .github/workflows/build-unsigned.yml
-on:
-  push:
-    branches:
-      - master    # ✅ 推送到master自动构建
-      - main
-      - develop
-```
-
-### 预期流程
+### 代码统计
 
 ```
-1. 执行 git push origin master
-   ↓
-2. 代码推送到GitHub
-   ↓
-3. GitHub自动检测到推送
-   ↓
-4. 触发 "Build APK (Unsigned - Debug)" 工作流
-   ↓
-5. 开始自动构建（5-10分钟）
-   ↓
-6. 构建完成后上传Artifacts
-   ↓
-7. 可下载APK
+Files changed: 17
+Insertions: 2070 lines
 ```
 
 ---
 
-## 📊 监控构建进度
+## 🎯 新功能亮点
 
-### 1. 查看构建状态
+### 1. 简化版主界面 (MainActivitySimple)
 
-```bash
-# 进入GitHub仓库
-https://github.com/awlei/aw2
+**顶部状态卡片**:
+- 连接状态指示器（圆点）
+- 状态文字（未连接/已连接）
+- 实时网速显示
+- 当前选中的服务器名称
 
-# 点击 "Actions" 标签
-```
+**中间服务器列表**:
+- 简洁的列表项设计
+- 清晰的选中状态（绿色边框+背景）
+- 显示协议类型和测试延迟
+- 订阅标签（可选）
 
-### 2. 查看具体构建
+**底部连接按钮**:
+- 大按钮设计，全宽
+- 播放/停止图标
+- 颜色变化指示状态
 
-- Actions → 点击最新的构建任务
-- 可以看到每个步骤的进度
-- 绿色✓ = 成功
-- 红色✗ = 失败
-- 蓝色🔄 = 进行中
+### 2. 简化的添加服务器流程
 
-### 3. 查看详细日志
+4种添加方式：
+1. **扫描二维码** - 最快，需摄像头权限
+2. **从剪贴板导入** - 快捷，需先复制
+3. **手动添加** - 灵活，6种协议可选
+4. **导入订阅** - 高效，批量导入
 
-点击任意步骤可以查看详细日志：
-- `Checkout code` - 代码检出
-- `Setup Android SDK` - 安装SDK
-- `Build APK` - 构建APK
-- `Upload all APKs` - 上传结果
+### 3. 极简设计原则
+
+- 只保留核心功能
+- 清晰的视觉层次
+- 简单的操作流程
+- 降低学习成本
 
 ---
 
 ## ⏱️ 预计构建时间
 
 | 步骤 | 预计时间 |
-|------|----------|
-| Checkout | 30秒 |
-| Setup SDK | 1-2分钟 |
-| Install NDK | 1-2分钟 |
-| Build libhevtun | 1-2分钟（首次）/ 30秒（缓存） |
-| Download libv2ray | 30秒 |
-| Build APK | 3-5分钟（Debug）/ 5-7分钟（Release） |
-| Upload Artifacts | 30秒 |
-| **总计** | **5-10分钟** |
+|------|---------|
+| Checkout代码 | 30秒 |
+| 设置Android SDK | 1-2分钟 |
+| 安装NDK | 1-2分钟 |
+| 构建libhevtun | 1-2分钟 |
+| 下载libv2ray | 30秒 |
+| 编译APK | 5-7分钟 |
+| 上传Artifacts | 30秒 |
+| **总计** | **10-15分钟** |
 
 ---
 
-## 📥 下载APK
+## 📱 下载新APK（构建完成后）
 
-### 1. 构建完成后
+### 步骤
 
-1. 进入 Actions → 点击完成的构建任务
-2. 向下滚动到 **Artifacts** 部分
-3. 点击 `aw-apk-release` 或 `aw-apk-debug`
-4. 解压下载的ZIP文件
-5. 得到APK文件
+1. **等待10-15分钟**让构建完成
+2. **访问Actions页面**:
+   - https://github.com/awlei/aw2/actions
+3. **点击最新的构建任务**（ID: 21432442372）
+4. **等待状态变为 ✅ 成功**
+5. **向下滚动到 Artifacts 部分**
+6. **点击 `aw-apk-release` 下载**
+7. **解压ZIP文件**
+8. **得到4个APK文件**:
+   - `aw_release_arm64-v8a.apk` - 64位ARM设备（推荐）
+   - `aw_release_armeabi-v7a.apk` - 32位ARM设备
+   - `aw_release_x86.apk` - x86模拟器
+   - `aw_release_x86_64.apk` - x86_64模拟器
 
-### 2. APK文件列表
+---
+
+## 🔍 查看构建状态
+
+### 方法1: GitHub Actions页面
+
+访问: https://github.com/awlei/aw2/actions
+
+### 方法2: 使用curl命令
 
 ```bash
-aw_release_arm64-v8a.apk      # 64位ARM设备（推荐）
-aw_release_armeabi-v7a.apk    # 32位ARM设备
-aw_release_x86.apk            # x86模拟器
-aw_release_x86_64.apk         # x86_64模拟器
+curl -H "Authorization: token YOUR_TOKEN" \
+  https://api.github.com/repos/awlei/aw2/actions/runs?per_page=1
+```
+
+### 方法3: GitHub CLI
+
+```bash
+gh run list -R awlei/aw2 --limit 1
 ```
 
 ---
 
-## 🎯 快速命令参考
+## 🎨 新界面预览
 
-### 推送并监控
+### 主界面结构
 
-```bash
-# 1. 推送代码
-cd /workspace/projects/aw2-vpn
-git push origin master
-
-# 2. 在浏览器中查看
-# https://github.com/awlei/aw2/actions
-
-# 3. 等待5-10分钟
-# 4. 下载APK
 ```
-
-### 查看状态
-
-```bash
-# 查看当前分支
-git branch
-
-# 查看提交历史
-git log --oneline -5
-
-# 查看远程仓库
-git remote -v
-
-# 查看未推送的提交
-git log origin/master..HEAD
+┌─────────────────────────────────────┐
+│ ● 未连接                      0 KB/s │  ← 状态卡片
+│   请选择服务器                       │
+├─────────────────────────────────────┤
+│ 服务器列表                    [+]   │  ← 标题栏
+├─────────────────────────────────────┤
+│ | 香港节点 01                    VLESS │  ← 服务器列表
+│ | 156ms                            │
+├─────────────────────────────────────┤
+│ | 美国节点 02                    VLESS │
+│ | 234ms                            │
+├─────────────────────────────────────┤
+│ | 日本节点 03                    VLESS │
+│ | 189ms                            │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│   ▶ 开始连接                        │  ← 连接按钮
+└─────────────────────────────────────┘
 ```
 
 ---
 
-## ❓ 常见问题
+## 🔄 如何使用简化版界面
 
-### Q1: 推送时提示认证失败
+当前配置：两个Activity都设置为LAUNCHER
 
-**解决**:
-1. 使用Personal Access Token（不是密码）
-2. 确保Token有 `repo` 和 `workflow` 权限
-3. 检查用户名是否正确
+### 方法1: 默认使用简化版（推荐）
 
-### Q2: 推送成功但没有触发构建
+修改 `AndroidManifest.xml`，注释掉原MainActivity的LAUNCHER intent-filter：
 
-**检查**:
-1. GitHub Actions是否启用
-   - Settings → Actions → General
-   - 勾选 "Allow all actions"
-2. 分支名称是否为 master/main/develop
-3. 工作流文件是否在 `.github/workflows/` 目录
+```xml
+<!-- 注释掉原MainActivity的LAUNCHER -->
+<activity
+    android:name=".ui.MainActivity"
+    android:exported="true"
+    android:launchMode="singleTask">
+    <!-- <intent-filter> -->
+    <!--     <action android:name="android.intent.action.MAIN" /> -->
+    <!--     <category android:name="android.intent.category.LAUNCHER" /> -->
+    <!--     <category android:name="android.intent.category.LEANBACK_LAUNCHER" /> -->
+    <!-- </intent-filter> -->
+    ...
+</activity>
 
-### Q3: 构建失败
-
-**解决**:
-1. 点击失败的步骤查看详细日志
-2. 检查代码语法错误
-3. 查看安全审计报告中的建议
-
-### Q4: 如何触发新的构建
-
-**方法1**: 推送新代码
-```bash
-# 任意修改并推送
-echo "# test" >> README.md
-git add . && git commit -m "Trigger build"
-git push origin master
+<!-- 保留MainActivitySimple的LAUNCHER -->
+<activity
+    android:name=".ui.MainActivitySimple"
+    android:exported="true"
+    android:launchMode="singleTask"
+    android:label="@string/app_name"
+    android:theme="@style/AppThemeDayNight.NoActionBar">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+    </intent-filter>
+    ...
+</activity>
 ```
 
-**方法2**: 手动触发
-1. GitHub → Actions → 选择工作流
-2. 点击 "Run workflow"
-3. 选择构建类型（release/debug）
+### 方法2: 保留两个入口
+
+不做修改，用户可以选择使用哪个版本。
+
+### 方法3: 添加切换按钮（未来功能）
+
+在简化版界面添加"进入高级模式"按钮。
 
 ---
 
-## 📞 获取帮助
+## 📊 功能对比
 
-如果遇到问题：
-
-1. **查看GitHub Actions日志**
-   - Actions → 点击失败的构建
-
-2. **阅读文档**
-   - [GITHUB_ACTIONS_BUILD_GUIDE.md](GITHUB_ACTIONS_BUILD_GUIDE.md)
-   - [QUICK_BUILD_GUIDE.md](QUICK_BUILD_GUIDE.md)
-
-3. **检查状态**
-   ```bash
-   git status
-   git remote -v
-   ```
-
----
-
-## ✅ 检查清单
-
-推送前检查：
-
-- [ ] 代码已提交
-- [ ] 提交信息清晰
-- [ ] 工作流文件正确
-- [ ] 分支名称正确
-
-推送后检查：
-
-- [ ] 代码已推送到GitHub
-- [ ] GitHub Actions已触发
-- [ ] 构建正在运行
-- [ ] 等待构建完成（5-10分钟）
-- [ ] 下载APK
-- [ ] 安装测试
+| 功能 | 原版 | 简化版 |
+|------|------|--------|
+| 连接/断开 | ✅ | ✅ |
+| 选择服务器 | ✅ | ✅ |
+| 添加服务器 | ✅ | ✅ |
+| 扫描二维码 | ✅ | ✅ |
+| 剪贴板导入 | ✅ | ✅ |
+| 手动添加 | ✅ | ✅ |
+| 导入订阅 | ✅ | ✅ |
+| 服务器测试 | ✅ | ⚠️ 简化版 |
+| 编辑服务器 | ✅ | ❌ 需进入原版 |
+| 删除服务器 | ✅ | ❌ 需进入原版 |
+| 排序服务器 | ✅ | ❌ |
+| 路由设置 | ✅ | ❌ 需进入原版 |
+| 分流规则 | ✅ | ❌ 需进入原版 |
+| 订阅管理 | ✅ | ⚠️ 简化版 |
+| 设置页面 | ✅ | ❌ 需进入原版 |
 
 ---
 
-**准备好了吗？运行以下命令：**
+## 🎯 适合人群
 
-```bash
-cd /workspace/projects/aw2-vpn
-git push origin master
-```
+### 简化版适合：
+- ✅ 新手用户 - 第一次使用VPN
+- ✅ 轻度用户 - 只需要基本连接功能
+- ✅ 老年人 - 不擅长操作复杂界面
+- ✅ 临时用户 - 偶尔需要使用
 
-**然后等待5-10分钟，APK就构建好了！🎉**
+### 原版适合：
+- ✅ 高级用户 - 需要详细配置
+- ✅ 技术用户 - 需要自定义路由、分流等
+- ✅ 专业用户 - 需要批量管理服务器
 
 ---
 
-**下一步**:
-1. 推送代码
-2. 访问 https://github.com/awlei/aw2/actions
-3. 查看构建进度
-4. 下载APK并测试
+## 🚀 后续优化计划
+
+### 短期优化（1-2周）
+- [ ] 长按服务器显示编辑/删除菜单
+- [ ] 下拉刷新订阅
+- [ ] 滑动测试延迟
+- [ ] 快捷方式支持
+
+### 中期优化（1个月）
+- [ ] 深色主题支持
+- [ ] 多语言国际化
+- [ ] 平滑动画效果
+- [ ] 手势操作（滑动断开连接）
+
+### 长期优化（3个月）
+- [ ] 智能推荐最快服务器
+- [ ] 流量统计显示
+- [ ] 连接历史记录
+- [ ] 一键配置向导
+
+---
+
+## 📝 相关文档
+
+- **设计文档**: `SIMPLE_UI_DESIGN.md`
+- **推送指南**: `PUSH_GUIDE.md`
+- **构建指南**: `PUSH_AND_BUILD.md`
+
+---
+
+## ✨ 总结
+
+✅ 代码已成功推送到GitHub
+✅ GitHub Actions自动构建已触发
+✅ 预计10-15分钟完成构建
+✅ 构建完成后可下载新APK
+
+**新版本亮点**：
+- 极简设计，易于使用
+- 清晰的状态指示
+- 简单的操作流程
+- 降低学习成本
+
+---
+
+## 📞 构建完成后
+
+构建完成后，你将获得：
+- ✅ 包含简化版界面的APK
+- ✅ 可在GitHub Actions Artifacts下载
+- ✅ 4个不同架构的APK文件
+
+**预计下载时间**: 10-15分钟后
+
+---
+
+**🎉 恭喜！代码已成功推送，APK正在构建中！**
