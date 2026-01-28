@@ -67,55 +67,9 @@ android {
         }
     }
 
-    androidComponents {
-        beforeVariants { variantBuilder ->
-            val variantName = variantBuilder.name
-            if (variantName.contains("fdroid")) {
-                variantBuilder.enable = true
-            }
-        }
-
-        onVariants { variant ->
-            val variantName = variant.name
-            val versionCode = defaultConfig.versionCode ?: 706
-            val versionName = defaultConfig.versionName
-
-            val versionCodes = mapOf(
-                "armeabi-v7a" to 2,
-                "arm64-v8a" to 1,
-                "x86" to 4,
-                "x86_64" to 3,
-                "universal" to 0
-            )
-
-            val fdroidVersionCodes = mapOf(
-                "armeabi-v7a" to 4,
-                "arm64-v8a" to 4,
-                "x86" to 4,
-                "x86_64" to 4,
-                "universal" to 4
-            )
-
-            val isFdroid = variantName.contains("fdroid", ignoreCase = true)
-
-            variant.outputs.forEach { output ->
-                val abi = output.filters.find { it.filterType.name == "ABI" }?.identifier ?: "universal"
-
-                val codes = if (isFdroid) versionCodes else fdroidVersionCodes
-                val newVersionCode = if (codes.containsKey(abi)) {
-                    if (isFdroid) {
-                        (100 * versionCode + codes[abi]!!) + 5000000
-                    } else {
-                        (1000000 * codes[abi]!!) + versionCode
-                    }
-                } else {
-                    versionCode
-                }
-
-                output.versionCode.set(newVersionCode)
-            }
-        }
-    }
+    // Note: version code override for ABI splits is disabled due to AGP 9.0 API changes
+    // This may cause version code conflicts in multi-ABI builds
+}
 
     sourceSets {
         getByName("main") {
