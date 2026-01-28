@@ -113,14 +113,6 @@ android {
                 }
 
                 output.versionCode.set(newVersionCode)
-
-                val newOutputFileName = if (isFdroid) {
-                    "aw_${versionName}-fdroid_${abi}.apk"
-                } else {
-                    "aw_${versionName}_${abi}.apk"
-                }
-
-                output.outputFileName.set(newOutputFileName)
             }
         }
     }
