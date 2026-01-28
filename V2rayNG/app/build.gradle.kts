@@ -88,8 +88,8 @@ android {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
-        disable += "MissingTranslation"
-        disable += "ExtraTranslation"
+        disable.add("MissingTranslation")
+        disable.add("ExtraTranslation")
     }
 
     kotlin {
