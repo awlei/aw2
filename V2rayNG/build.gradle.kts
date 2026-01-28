@@ -1,12 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.android.library) apply false
+    id("com.android.application") version "8.1.2" apply false
+    id("com.android.library") version "8.1.2" apply false
 }
 
 buildscript {
     dependencies {
-        classpath(libs.gradle.license.plugin)
+        classpath("com.jaredsburrows:gradle-license-plugin:0.9.8")
     }
 }
 

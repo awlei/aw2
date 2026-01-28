@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.application") version "8.1.2"
     id("com.jaredsburrows.license")
 }
 
@@ -116,56 +116,54 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar", "*.jar"))))
 
     // AndroidX Core Libraries
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.preference.ktx)
-    implementation(libs.recyclerview)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.viewpager2)
-    implementation(libs.androidx.fragment)
+    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.activity:activity:1.12.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
 
     // UI Libraries
-    implementation(libs.material)
-    implementation(libs.toasty)
-    implementation(libs.editorkit)
-    implementation(libs.flexbox)
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("com.github.GrenderG:Toasty:1.5.2")
+    implementation("com.blacksquircle.ui:editorkit:2.9.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 
     // Data and Storage Libraries
-    implementation(libs.mmkv.static)
-    implementation(libs.gson)
-    implementation(libs.okhttp)
+    implementation("com.tencent:mmkv-static:1.3.16")
+    implementation("com.google.code.gson:gson:2.13.2")
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
 
     // Reactive and Utility Libraries
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     // Language and Processing Libraries
-    implementation(libs.language.base)
-    implementation(libs.language.json)
+    implementation("com.blacksquircle.ui:language-base:2.9.0")
+    implementation("com.blacksquircle.ui:language-json:2.9.0")
 
     // Intent and Utility Libraries
-    implementation(libs.quickie.foss)
-    implementation(libs.core)
+    implementation("com.github.T8RIN.QuickieExtended:quickie-foss:1.14.0")
+    implementation("com.google.zxing:core:3.5.4")
 
     // AndroidX Lifecycle and Architecture Components
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 
     // Background Task Libraries
-    implementation(libs.work.runtime.ktx)
-    implementation(libs.work.multiprocess)
+    implementation("androidx.work:work-runtime-ktx:2.11.0")
+    implementation("androidx.work:work-multiprocess:2.11.0")
 
     // Multidex Support
-    implementation(libs.multidex)
+    implementation("androidx.multidex:multidex:2.0.1")
 
     // Testing Libraries
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    // testImplementation(libs.org_mockito_mockito_inline)  // Temporarily disabled
-    // testImplementation(libs.mockito_kotlin)  // Temporarily disabled
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }
