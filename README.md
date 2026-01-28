@@ -5,7 +5,18 @@ A V2Ray client for Android, support [Xray core](https://github.com/XTLS/Xray-cor
 [![API](https://img.shields.io/badge/API-24%2B-yellow.svg?style=flat)](https://developer.android.com/about/versions/lollipop)
 [![Kotlin Version](https://img.shields.io/badge/Kotlin-2.3.0-blue.svg)](https://kotlinlang.org)
 [![GitHub Actions](https://github.com/awlei/aw2/workflows/Build%20APK%20%28Unsigned%20-%20Debug%29/badge.svg)](https://github.com/awlei/aw2/actions)
+[![Security](https://img.shields.io/badge/Security-Safe-brightgreen.svg)](SECURITY_AUDIT_REPORT.md)
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-brightgreen.svg)](https://t.me/v2rayn)
+
+## 🔒 Security Status
+
+✅ **All security issues fixed!** - No malware, no data collection, fully audited.
+
+- [x] No hidden links or malware detected
+- [x] Network security optimized
+- [x] All dependencies are secure
+- [x] See [Security Audit Report](SECURITY_AUDIT_REPORT.md) for details
+- [x] See [Security Fix Summary](SECURITY_FIX_SUMMARY.md) for latest fixes
 
 ## 🚀 Quick Start with GitHub Actions
 
@@ -37,6 +48,7 @@ Android project under V2rayNG folder can be compiled directly in Android Studio,
 - [Quick Build Guide](QUICK_BUILD_GUIDE.md) - 5-minute APK build tutorial
 - [Build Checklist](BUILD_CHECKLIST.md) - Step-by-step verification checklist
 - [Security Audit Report](SECURITY_AUDIT_REPORT.md) - Security analysis and recommendations
+- [Security Fix Summary](SECURITY_FIX_SUMMARY.md) - Latest security fixes
 - [Optimization Report](OPTIMIZATION_REPORT.md) - Code quality improvements
 
 ### More in our [wiki](https://github.com/2dust/v2rayNG/wiki)
@@ -48,13 +60,6 @@ For a quick start, read guide for [Go Mobile](https://github.com/golang/go/wiki/
 
 aw can run on Android Emulators. For WSA, VPN permission need to be granted via
 `appops set [package name] ACTIVATE_VPN allow`
-
-## 🔒 Security
-
-- ✅ No malware or trojan detected
-- ✅ No data collection or telemetry
-- ✅ All dependencies are secure
-- ⚠️ See [Security Audit Report](SECURITY_AUDIT_REPORT.md) for details
 
 ## 📄 License
 
