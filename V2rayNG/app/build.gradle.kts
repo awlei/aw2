@@ -77,7 +77,7 @@ android {
 
         onVariants { variant ->
             val variantName = variant.name
-            val versionCode = defaultConfig.versionCode
+            val versionCode = defaultConfig.versionCode ?: 706
             val versionName = defaultConfig.versionName
 
             val versionCodes = mapOf(
@@ -119,7 +119,9 @@ android {
 
     sourceSets {
         getByName("main") {
-            jniLibs.setSrcDirs(listOf("libs"))
+            jniLibs {
+                srcDirs("libs")
+            }
         }
     }
 
