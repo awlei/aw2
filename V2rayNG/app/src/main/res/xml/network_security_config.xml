@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config xmlns:tools="http://schemas.android.com/tools">
-    <base-config cleartextTrafficPermitted="true">
+    <!-- 默认配置：禁止明文流量，仅信任系统证书 -->
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
-            <certificates
-                src="user"
-                tools:ignore="AcceptsUserCertificates" />
         </trust-anchors>
     </base-config>
+
+    <!-- 延迟测试域名：允许明文流量（必需） -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">www.gstatic.com</domain>
+        <domain includeSubdomains="true">www.google.com</domain>
+        <domain includeSubdomains="true">api.ip.sb</domain>
+        <domain includeSubdomains="true">github.com</domain>
+        <domain includeSubdomains="true">raw.githubusercontent.com</domain>
+        <domain includeSubdomains="true">api.github.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- 仅在必要时允许用户证书（建议保持禁用以提高安全性） -->
+    <!-- 如需启用，请取消下面的注释并了解安全风险 -->
+    <!--
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+    -->
 </network-security-config>
