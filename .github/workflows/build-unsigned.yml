@@ -1,0 +1,157 @@
+name: Build APK (Unsigned - Debug)
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: false
+        default: 'release'
+        type: choice
+        options:
+          - debug
+          - release
+  push:
+    branches:
+      - master
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3.2.0
+      with:
+        log-accepted-android-sdk-licenses: false
+        cmdline-tools-version: '13114758'
+        packages: 'platforms;android-36.1 build-tools;36.1.0 platform-tools'
+
+    - name: Install NDK
+      run: |
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+          --channel=0 \
+          --install "ndk;28.2.13676358"
+        echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+        sed -i '10i\
+        \
+            ndkVersion = "28.2.13676358"' ${{ github.workspace }}/V2rayNG/app/build.gradle.kts
+
+    - name: Restore cached libhevtun
+      id: cache-libhevtun-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Build libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      run: |
+        bash compile-hevtun.sh
+
+    - name: Save libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Copy libhevtun
+      run: |
+        cp -r ${{ github.workspace }}/libs ${{ github.workspace }}/V2rayNG/app
+
+    - name: Fetch AndroidLibXrayLite tag
+      run: |
+        pushd AndroidLibXrayLite
+        CURRENT_TAG=$(git describe --tags --abbrev=0)
+        echo "Current tag in this repo: $CURRENT_TAG"
+        echo "CURRENT_TAG=$CURRENT_TAG" >> $GITHUB_ENV
+        popd
+
+    - name: Download libv2ray
+      uses: robinraju/release-downloader@v1.12
+      with:
+        repository: '2dust/AndroidLibXrayLite'
+        tag: ${{ env.CURRENT_TAG }}
+        fileName: 'libv2ray.aar'
+        out-file-path: V2rayNG/app/libs/
+
+    - name: Setup Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Grant execute permission for gradlew
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        chmod +x gradlew
+
+    - name: Build APK (Debug - Unsigned)
+      if: github.event.inputs.build_type == 'debug'
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        echo "sdk.dir=${ANDROID_HOME}" > local.properties
+        ./gradlew assembleDebug
+
+    - name: Build APK (Release - Unsigned)
+      if: github.event.inputs.build_type == 'release' || github.event.inputs.build_type == ''
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        echo "sdk.dir=${ANDROID_HOME}" > local.properties
+        ./gradlew assembleRelease
+
+    - name: Rename APKs
+      run: |
+        cd ${{ github.workspace }}/V2rayNG/app/build/outputs/apk
+        for dir in */; do
+          flavor=${dir%/}
+          for apk in $flavor/release/*.apk; do
+            if [ -f "$apk" ]; then
+              filename=$(basename "$apk")
+              abi=$(echo "$filename" | sed -n 's/.*_\(.*\)\.apk/\1/p')
+              if [ "$abi" != "$filename" ]; then
+                newname="aw_${{ github.event.inputs.build_type }}_${abi}.apk"
+                cp "$apk" "$GITHUB_WORKSPACE/$newname"
+                echo "Created: $newname"
+              fi
+            fi
+          done
+        done
+
+    - name: Upload all APKs
+      uses: actions/upload-artifact@v6
+      if: success()
+      with:
+        name: aw-apk-${{ github.event.inputs.build_type }}
+        path: |
+          aw_*.apk
+        retention-days: 30
+
+    - name: Create Release
+      if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'release'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ github.run_number }}
+        name: aw v${{ github.run_number }}
+        body: |
+          ## aw APK Release
+          Build: ${{ github.run_number }}
+          Commit: ${{ github.sha }}
+          Date: ${{ github.event.head_commit.timestamp }}
+
+          **Note**: This is an unsigned release build for testing purposes.
+        draft: false
+        prerelease: true
+        files: |
+          aw_*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
