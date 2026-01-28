@@ -69,7 +69,6 @@ android {
 
     // Note: version code override for ABI splits is disabled due to AGP 9.0 API changes
     // This may cause version code conflicts in multi-ABI builds
-}
 
     sourceSets {
         getByName("main") {
