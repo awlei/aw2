@@ -428,4 +428,29 @@
         <item>WebDAV</item>
     </string-array>
 
+    <!-- Simple UI Strings -->
+    <string name="simple_status_not_connected">未连接</string>
+    <string name="simple_status_connecting">连接中...</string>
+    <string name="simple_status_connected">已连接</string>
+    <string name="simple_status_error">连接失败</string>
+    <string name="simple_select_server">请选择服务器</string>
+    <string name="simple_server_list">服务器列表</string>
+    <string name="simple_add_server">添加服务器</string>
+    <string name="simple_connect">开始连接</string>
+    <string name="simple_disconnect">断开连接</string>
+    <string name="simple_no_servers">暂无服务器</string>
+    <string name="simple_no_servers_hint">点击右上角 + 添加服务器</string>
+    <string name="simple_scan_qrcode">扫描二维码</string>
+    <string name="simple_scan_qrcode_hint">扫描服务器二维码</string>
+    <string name="simple_import_clipboard">从剪贴板导入</string>
+    <string name="simple_import_clipboard_hint">粘贴服务器链接</string>
+    <string name="simple_manual_add">手动添加</string>
+    <string name="simple_manual_add_hint">手动输入服务器信息</string>
+    <string name="simple_import_subscription">导入订阅</string>
+    <string name="simple_import_subscription_hint">从订阅地址批量导入</string>
+    <string name="simple_not_tested">未测试</string>
+    <string name="simple_subscription_tag">订阅</string>
+    <string name="simple_add_server_title">添加服务器</string>
+    <string name="simple_add_server_desc">选择一种方式添加服务器配置</string>
+
 </resources>
