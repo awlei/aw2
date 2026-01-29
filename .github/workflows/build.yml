@@ -99,6 +99,11 @@ jobs:
         echo "=== Gradle Wrapper JAR ==="
         ls -lh gradle/wrapper/
 
+    - name: List available Gradle tasks
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        ./gradlew tasks --group=build | grep -i assemble || echo "No assemble tasks found"
+
     - name: Build APK (Unsigned)
       id: build_apk
       run: |
