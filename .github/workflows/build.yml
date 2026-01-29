@@ -112,7 +112,9 @@ jobs:
         chmod 755 gradlew
         ./gradlew --version
         ./gradlew assembleFdroidRelease --no-daemon --refresh-dependencies --stacktrace 2>&1 | tee build.log
-        echo "Build exit code: $?"
+        BUILD_EXIT_CODE=$?
+        echo "Build exit code: $BUILD_EXIT_CODE"
+        exit $BUILD_EXIT_CODE
 
     - name: List build outputs
       if: always()
