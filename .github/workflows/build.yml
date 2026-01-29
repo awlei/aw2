@@ -121,6 +121,9 @@ jobs:
         echo ""
         echo "=== Listing all files in build/outputs/apk ==="
         find ${{ github.workspace }}/V2rayNG/app/build/outputs/apk -type f 2>/dev/null || echo "Directory does not exist"
+        echo ""
+        echo "=== Listing entire build/outputs directory ==="
+        ls -la ${{ github.workspace }}/V2rayNG/app/build/outputs/ 2>/dev/null || echo "build/outputs does not exist"
 
     - name: Upload build log
       uses: actions/upload-artifact@v6
