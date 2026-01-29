@@ -100,12 +100,20 @@ jobs:
         ls -lh gradle/wrapper/
 
     - name: Build APK (Unsigned)
+      id: build_apk
       run: |
         cd ${{ github.workspace }}/V2rayNG
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
         chmod 755 gradlew
         ./gradlew --version
-        ./gradlew assembleRelease --no-daemon --refresh-dependencies
+        ./gradlew assembleRelease --no-daemon --refresh-dependencies 2>&1 | tee build.log
+
+    - name: Upload build log
+      uses: actions/upload-artifact@v6
+      if: failure()
+      with:
+        name: build-log
+        path: ${{ github.workspace }}/V2rayNG/build.log
     
     - name: Upload arm64-v8a APK
       uses: actions/upload-artifact@v6
