@@ -148,10 +148,10 @@ jobs:
     
     - name: Upload all APKs
       uses: actions/upload-artifact@v6
-      if: ${{  success() }}
+      if: always()
       with:
         name: apks
-        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/**/*.apk
+        path: V2rayNG/app/build/outputs/apk/**/*.apk
 
     - name: Upload to release
       uses: svenstaro/upload-release-action@v2
