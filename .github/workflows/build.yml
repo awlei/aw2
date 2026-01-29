@@ -108,6 +108,15 @@ jobs:
         ./gradlew --version
         ./gradlew assembleRelease --no-daemon --refresh-dependencies 2>&1 | tee build.log
 
+    - name: List build outputs
+      if: always()
+      run: |
+        echo "=== Listing build output directory ==="
+        find ${{ github.workspace }}/V2rayNG/app/build -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
+        echo ""
+        echo "=== Listing all files in build/outputs/apk ==="
+        find ${{ github.workspace }}/V2rayNG/app/build/outputs/apk -type f 2>/dev/null || echo "Directory does not exist"
+
     - name: Upload build log
       uses: actions/upload-artifact@v6
       if: failure()
