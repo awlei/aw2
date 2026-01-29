@@ -127,6 +127,17 @@ jobs:
         echo ""
         echo "=== Listing entire build/outputs directory ==="
         ls -la ${{ github.workspace }}/V2rayNG/app/build/outputs/ 2>/dev/null || echo "build/outputs does not exist"
+        echo ""
+        echo "=== Checking if build directory exists ==="
+        ls -la ${{ github.workspace }}/V2rayNG/app/build/ 2>/dev/null || echo "build directory does not exist"
+        echo ""
+        echo "=== Checking build.log ==="
+        if [ -f ${{ github.workspace }}/V2rayNG/build.log ]; then
+          echo "Build log exists, last 50 lines:"
+          tail -50 ${{ github.workspace }}/V2rayNG/build.log
+        else
+          echo "Build log does not exist"
+        fi
 
     - name: Upload build log
       uses: actions/upload-artifact@v6
