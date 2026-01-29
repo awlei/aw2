@@ -37,7 +37,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    flavorDimensions.add("distribution")
+    flavorDimensions += "distribution"
     productFlavors {
         create("fdroid") {
             dimension = "distribution"

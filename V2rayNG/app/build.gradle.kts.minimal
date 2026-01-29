@@ -1,0 +1,31 @@
+plugins {
+    id("com.android.application") version "8.1.2"
+}
+
+android {
+    namespace = "com.v2ray.ang"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.v2ray.ang"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 706
+        versionName = "2.0.6"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.17.0")
+}
