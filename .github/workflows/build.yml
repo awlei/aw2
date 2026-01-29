@@ -133,26 +133,12 @@ jobs:
         name: build-log
         path: ${{ github.workspace }}/V2rayNG/build.log
     
-    - name: Upload arm64-v8a APK
+    - name: Upload all APKs
       uses: actions/upload-artifact@v6
       if: ${{  success() }}
       with:
-        name: arm64-v8a
-        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/*/release/*arm64-v8a*.apk
-
-    - name: Upload armeabi-v7a APK
-      uses: actions/upload-artifact@v6
-      if: ${{  success() }}
-      with:
-        name: armeabi-v7a
-        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/*/release/*armeabi-v7a*.apk
-
-    - name: Upload x86 APK
-      uses: actions/upload-artifact@v6
-      if: ${{  success() }}
-      with:
-        name: x86-apk
-        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/*/release/*x86*.apk
+        name: apks
+        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/**/*.apk
 
     - name: Upload to release
       uses: svenstaro/upload-release-action@v2
