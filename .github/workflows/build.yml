@@ -111,7 +111,8 @@ jobs:
         echo "sdk.dir=${ANDROID_HOME}" > local.properties
         chmod 755 gradlew
         ./gradlew --version
-        ./gradlew assembleFdroidRelease --no-daemon --refresh-dependencies 2>&1 | tee build.log
+        ./gradlew assembleFdroidRelease --no-daemon --refresh-dependencies --stacktrace 2>&1 | tee build.log
+        echo "Build exit code: $?"
 
     - name: List build outputs
       if: always()
